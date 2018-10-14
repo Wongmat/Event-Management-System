@@ -1,0 +1,33 @@
+<div class="row">
+    <% events.forEach((model) => { %>
+    <div class="card col-4 p-4">
+            <img src="<%= model.img_url %>" class="h-50 w-80">
+            <a href="/event/view/<%= model.id %>" class="card-title"><%= model.name %></a>
+            <p><%= model.short_desc %></p>        
+    </div>
+    <% }); %>
+</div>
+
+
+</div>
+<div class="row">
+    <% const current = parseInt(req.query.page) || 1; %>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link" href="/event/search/?name=<%= req.query.name %>&page=<%= Math.max(current-1, 1) %>">Previous</a>
+        </li>
+
+        <% for (i = 1; i <= count; i++) { %>
+            <li class="page-item">
+                <a class="page-link" href="/event/search/?name=<%= req.query.name %>&page=<%= i %>"><%= i %></a>
+            </li>
+        <% } %>
+
+        <li class="page-item">
+            <a class="page-link" href="/event/search/?name=<%= req.query.name %>&page=<%= Math.min(current+1, count) %>">Next</a>
+        </li>
+    </ul>
+</nav>
+</div>
