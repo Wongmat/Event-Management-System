@@ -13,10 +13,11 @@
         </div>
         <div class="form-group">
                 <label>Full Description</label>
-                <textarea class="form-control" name="Event[full_desc]" rows="5" required><%= event.full_desc %></textarea>
+                <textarea class="form-control" name="Event[full_desc]" rows="10" required><%= event.full_desc %></textarea>
             </div>
+            
     </div>
-    <div class="col">
+    <div class="col-6">
     <div class="form-group">
             <label>Image URL</label>
             <input type="text" class="form-control" name="Event[img_url]" value="<%= event.img_url %>" required>
@@ -54,6 +55,7 @@
                         ><%=venue %></option>
                   <% }); %>
                     </select>
+                </div>
     <div class="form-group">
         <label>Quota</label>
         <input type="number" class="form-control" name="Event[quota]" value="<%= event.quota %>" required>
@@ -66,7 +68,13 @@
         >
         <label class="form-check-label" for="HighlightedCheck">Highlighted Event</label>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary mt-2">Submit</button>
     </div>
 </div>
 </form>
+
+<div class="row">
+    <form action="/event/delete/<%= event.id %>" method="POST" class="col-2">
+        <button class="btn btn-danger">Delete</button>
+    </form>
+</div>

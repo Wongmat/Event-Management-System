@@ -1,12 +1,14 @@
-<table class="table">
-        <tr><td><%= event.name %></td></tr>
-        <tr><td><%= event.short_desc %></td></tr>
-        <tr><td><%= event.full_desc %></td></tr>
-        <tr><td><%= event.img_url %></td></tr>
-        <tr><td><%= event.organizer %></td></tr>
-        <tr><td><%= event.time %></td></tr>
-        <tr><td><%= event.date %></td></tr>
-        <tr><td><%= event.venue %></td></tr>
-        <tr><td><%= event.quota %></td></tr>
-        <tr><td><%= event.highlighted %></td></tr>
-</table>
+<div class="card p-4">
+        <h3 class="card-title"><%= event.name %></h3>
+        <div class="row">
+                        <img src="<%= event.img_url %>" class="col-4" height="400vh">
+                        <div class="col-8">
+                        <div class="card"><%= event.full_desc %></div> 
+                        <div class="card"><p><b>Organizer: </b><%= event.organizer %></p></div>  
+                        <div class="card"><p><b>Date: </b><%= event.date %></p></div>    
+                        <div class="card"><p><b>Time: </b><%= event.time %></p></div>  
+                        <div class="card"><p><b>Venue: </b><%= event.venue %></p></div>  
+                        <div class="card"><p><b>Quota: </b><%= event.quota %></p></div>       
+                </div>     
+                    </div>
+</div>

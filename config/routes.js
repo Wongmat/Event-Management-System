@@ -47,6 +47,8 @@ module.exports.routes = {
 
   'POST /event/update/:id': 'EventController.update',
 
+  'POST /event/delete/:id': 'EventController.delete',
+
   /***************************************************************************
   *                                                                          *
   * More custom routes here...                                               *

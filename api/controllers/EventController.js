@@ -21,8 +21,7 @@ module.exports = {
 
 index: async function (req, res) {
 
-    var events = await Event.find({highlighted: 'Highlighted'});
-    console.log(events);
+    var events = await Event.find({highlighted: 'Highlighted'}).limit(4);
     return res.view('event/index', { 'events': events });
 
 },
@@ -32,6 +31,23 @@ admin: async function (req, res) {
     var events = await Event.find();
     return res.view('event/admin', { 'events': events });
 
+},
+
+delete: async function (req, res) {
+
+    if (req.method == "POST") {
+        const id = parseInt(req.params.id) || -1;
+
+        var models = await Event.destroy(id).fetch();
+
+        if (models.length > 0)
+            return res.send("Event Deleted.");
+        else
+            return res.send("Event not found.");
+
+    } else {
+        return res.send("Request Forbidden");
+    }
 },
 
 view: async function (req, res) {
@@ -79,6 +95,22 @@ update: async function (req, res) {
             return res.send("Event not found!");
 
     }
+},
+
+search: async function (req, res) {
+    const qName = req.query.name || "";
+    const qPage = Math.max(req.query.page - 1, 0) || 0;
+    const numOfItemsPerPage = 2;
+        var events = await Event.find({
+            where: { name: { contains: qName } },
+            sort: 'name',
+            limit: numOfItemsPerPage, 
+            skip: numOfItemsPerPage * qPage
+        });
+
+        var numOfPage = Math.ceil(await Event.count() / numOfItemsPerPage);
+
+    return res.view('event/search', { 'events': events, 'count': numOfPage });
 },
 
 };
