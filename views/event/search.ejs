@@ -1,33 +1,86 @@
 <div class="row">
+        <% const current = parseInt(req.query.page) || 1; %>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" href="<%= pageLess %>page=<%= Math.max(current-1, 1) %>">Previous</a>
+            </li>
+    
+            <% for (i = 1; i <= count; i++) { %>
+                <li class="page-item">
+                    <a class="page-link" href="<%= pageLess %>page=<%= i %>"><%= i %></a>
+                </li>
+            <% } %>
+    
+            <li class="page-item">
+                <a class="page-link" href="<%= pageLess %>page=<%= Math.min(current+1, count) %>">Next</a>
+            </li>
+        </ul>
+    </nav>
+    </div>
+<div class="row">
+    <div class="col-8">
+        <div class="row">
     <% events.forEach((model) => { %>
-    <div class="card col-4 p-4">
-            <img src="<%= model.img_url %>" class="h-50 w-80">
+    <div class="card col-6" style="height:70vh;">
+            <div class="card-body h-100">
+            <img src="<%= model.img_url %>" class="card-img-top pb-2" style="max-height: 60%;">
             <a href="/event/view/<%= model.id %>" class="card-title"><%= model.name %></a>
-            <p><%= model.short_desc %></p>        
+            <p class="card-text pt-2"><%= model.short_desc %></p>   
+            </div>     
     </div>
     <% }); %>
 </div>
+</div>
+<div class="col-4">
+        <form action="/event/search" method="GET">
+        
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-control" name="name" value="<%= req.query.name %>" required>
+            </div>
+
+            <div class="form-group">
+                    <label>Organizer</label>
+              <select class="form-control" name="organizer">
+                    <option style="display:none;" value="">Please select an option</option>
+                    <% organizers.forEach(function(organizer){ %>
+                        <option value="<%= organizer %>" 
+                            <% if (organizer === req.query.organizer) { %>
+                        selected="selected"
+                        <% }; %>
+                            ><%= organizer %></option>
+                      <% }); %>
+      </select>
+                </div>
+
+                <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" class="form-control" name="start_date" value="<%= req.query.start_date %>">
+                    </div>
+
+                    <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" class="form-control" name="end_date" value="<%= req.query.start_date %>">
+                        </div>
+
+                        <div class="form-group">
+                                <label>Venue</label>
+                                <select class="form-control" name="venue">
+                                        <option style="display:none;" value="">Please select an option</option>
+                                        <% organizers.forEach(function(venue){ %>
+                                            <option value="<%=venue %>" <% if (venue === req.query.venue) { %>
+                                            selected="selected"
+                                            <% }; %>
+                                                ><%= venue %></option>
+                                          <% }); %>
+                          </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Submit</button>
+
+                            </form>
 
 
 </div>
-<div class="row">
-    <% const current = parseInt(req.query.page) || 1; %>
-
-<nav aria-label="Page navigation example">
-    <ul class="pagination">
-        <li class="page-item">
-            <a class="page-link" href="/event/search/?name=<%= req.query.name %>&page=<%= Math.max(current-1, 1) %>">Previous</a>
-        </li>
-
-        <% for (i = 1; i <= count; i++) { %>
-            <li class="page-item">
-                <a class="page-link" href="/event/search/?name=<%= req.query.name %>&page=<%= i %>"><%= i %></a>
-            </li>
-        <% } %>
-
-        <li class="page-item">
-            <a class="page-link" href="/event/search/?name=<%= req.query.name %>&page=<%= Math.min(current+1, count) %>">Next</a>
-        </li>
-    </ul>
-</nav>
 </div>

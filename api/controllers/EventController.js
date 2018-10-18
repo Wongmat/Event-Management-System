@@ -98,19 +98,29 @@ update: async function (req, res) {
 },
 
 search: async function (req, res) {
-    const qName = req.query.name || "";
     const qPage = Math.max(req.query.page - 1, 0) || 0;
+    const terms = {};
+    for (let k in req.query) {
+        
+        if (req.query[k] != "" && k != "page") { 
+            terms[k] = (k === "name")  ?  {contains: req.query[k]} : req.query[k]
+        
+    }
+}
+
+    
     const numOfItemsPerPage = 2;
         var events = await Event.find({
-            where: { name: { contains: qName } },
+            where: terms,
             sort: 'name',
             limit: numOfItemsPerPage, 
             skip: numOfItemsPerPage * qPage
         });
-
-        var numOfPage = Math.ceil(await Event.count() / numOfItemsPerPage);
-
-    return res.view('event/search', { 'events': events, 'count': numOfPage });
+        var numOfPage = Math.ceil(await Event.count({ where: terms})/ numOfItemsPerPage);
+        let pageLess = (req.url.endsWith("search")) 
+        ? req.url + "?" : (req.url.match(/page.*$/)) 
+        ? req.url.replace(/page.*$/, "") : req.url + "&";
+    return res.view('event/search', { 'events': events, 'count': numOfPage, 'pageLess': pageLess });
 },
 
 };

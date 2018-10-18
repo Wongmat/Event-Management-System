@@ -45,6 +45,14 @@ module.exports.routes = {
       venues: venues
     } },
 
+    '/event/search': {
+      controller: 'EventController',
+      action: 'search',
+      locals: {
+        organizers: organizers,
+        venues: venues
+      } },
+
   'POST /event/update/:id': 'EventController.update',
 
   'POST /event/delete/:id': 'EventController.delete',
