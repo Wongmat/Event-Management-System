@@ -7,8 +7,8 @@
  * For more information on configuring custom routes, check out:
  * https://sailsjs.com/anatomy/config/routes-js
  */
-const organizers = ["Volvo", "Saab", "Fiat", "Audi"];
-const venues = ["Volvo", "Saab", "Fiat", "Audi"];
+const organizers = ["CS Students Association", "Arts Students Association", "AIESEC", "Film Studies Students Association"];
+const venues = ["FSC", "AAB", "CVA", "OEM"];
 
 module.exports.routes = {
 

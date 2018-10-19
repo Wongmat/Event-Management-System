@@ -14,9 +14,10 @@ module.exports = {
     if (typeof req.body.Event === "undefined")
         return res.badRequest("Form-data not received.");
     if (!req.body.Event.highlighted) req.body.Event.highlighted = "Not highlighted";
+    req.body.Event.date = new Date(req.body.Event.date);
     await Event.create(req.body.Event);
 
-    return res.ok("Successfully created!");
+    return res.redirect(200, './create')
 },
 
 index: async function (req, res) {
@@ -29,6 +30,7 @@ index: async function (req, res) {
 admin: async function (req, res) {
 
     var events = await Event.find();
+    console.log(events[0], events[1]);
     return res.view('event/admin', { 'events': events });
 
 },
@@ -65,7 +67,7 @@ view: async function (req, res) {
 },
 
 update: async function (req, res) {
-
+    console.log(req.path)
     var id = parseInt(req.params.id) || -1;
     if (req.method == "GET") {
 
@@ -90,7 +92,7 @@ update: async function (req, res) {
             highlighted: req.body.Event.highlighted || "Not highlighted",
         }).fetch();
         if (models.length > 0)
-            return res.send("Record updated");
+            return res.redirect(200, '/event/admin')
         else
             return res.send("Event not found!");
 
@@ -99,16 +101,16 @@ update: async function (req, res) {
 
 search: async function (req, res) {
     const qPage = Math.max(req.query.page - 1, 0) || 0;
-    const terms = {};
-    for (let k in req.query) {
-        
-        if (req.query[k] != "" && k != "page") { 
-            terms[k] = (k === "name")  ?  {contains: req.query[k]} : req.query[k]
-        
+    let startDate = (req.query.start_date == '') ? new Date("01-01-1900") : new Date(req.query.start_date);
+    let endDate = (req.query.end_date == '') ? new Date("12-31-3000") : new Date(req.query.end_date);
+    const terms = (Object.keys(req.query).length < 2) ? {} : {
+        name: { contains: req.query.name },
+        organizer: req.query.organizer || {'!=': req.query.organizer },
+        date: {'>=': startDate, '<=': endDate},
+        venue: req.query.venue || {'!=': req.query.venue}
     }
-}
 
-    
+    console.log(terms);
     const numOfItemsPerPage = 2;
         var events = await Event.find({
             where: terms,
