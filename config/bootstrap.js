@@ -10,7 +10,8 @@
  */
 
 module.exports.bootstrap = async function(done) {
-
+  sails.bcrypt = require('bcrypt');
+  const saltRounds = 10; 
   if (await Event.count() > 0) {
     return done();
 }
@@ -81,6 +82,15 @@ await Event.createEach([
   highlighted: "Highlighted",
 },
 ]);
+
+const hash = await sails.bcrypt.hash('123456', saltRounds);
+
+await User.createEach([
+  { "username": "siteAdmin", "status": "admin", "password": hash },
+  { "username": "Joe", "status": "student", "password": hash },
+  // etc.
+]);
+
   return done();
 
 };

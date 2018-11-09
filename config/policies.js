@@ -19,4 +19,10 @@ module.exports.policies = {
 
   // '*': true,
 
+  EventController: {
+
+    create: 'isAdmin'
+
+}
+
 };

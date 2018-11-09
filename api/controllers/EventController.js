@@ -24,13 +24,10 @@ index: async function (req, res) {
 
     var events = await Event.find({highlighted: 'Highlighted'}).limit(4);
     return res.view('event/index', { 'events': events });
-
 },
 
 admin: async function (req, res) {
-
     var events = await Event.find();
-    console.log(events[0], events[1]);
     return res.view('event/admin', { 'events': events });
 
 },
@@ -67,7 +64,6 @@ view: async function (req, res) {
 },
 
 update: async function (req, res) {
-    console.log(req.path)
     var id = parseInt(req.params.id) || -1;
     if (req.method == "GET") {
 
@@ -109,8 +105,6 @@ search: async function (req, res) {
         date: {'>=': startDate, '<=': endDate},
         venue: req.query.venue || {'!=': req.query.venue}
     }
-
-    console.log(terms);
     const numOfItemsPerPage = 2;
         var events = await Event.find({
             where: terms,
