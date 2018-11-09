@@ -23,7 +23,7 @@ module.exports = {
 
     password: {
       type: "string"
-    }
+    },
 
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
@@ -35,7 +35,18 @@ module.exports = {
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
+    isRegistered: {
+      collection: 'Event',
+      via: 'hasAttending'
+    }
+
+
   },
+
+  customToJSON: function() {
+    // Return a shallow copy of this record with the password removed.
+    return _.omit(this, ['password'])
+},
 
 };
 

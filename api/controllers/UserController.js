@@ -14,7 +14,7 @@ module.exports = {
         if (!req.body.password) return res.badRequest();          
     
         var user = await User.findOne({ username: req.body.username });
-    
+        console.log(user.id)
         if (!user) {
             res.status(401);
             return res.send("User not found");
@@ -52,6 +52,62 @@ module.exports = {
             return res.redirect('/');
             
         });
+    },
+
+    populate: async function (req, res) {
+
+        if (!['isRegistered'].includes(req.params.association)) return res.notFound();
+    
+        const message = sails.getInvalidIdMsg(req.params);
+    
+        if (message) return res.badRequest(message);
+    
+        var model = await User.findOne(req.params.id).populate(req.params.association);
+    
+        if (!model) return res.notFound();
+    
+        return res.json(model);
+    
+    },
+
+    register: async function (req, res) {
+
+        if (!['isRegistered'].includes(req.params.association)) return res.notFound();
+    
+        const message = sails.getInvalidIdMsg(req.params);
+    
+        if (message) return res.badRequest(message);
+    
+        if (!await User.findOne(req.params.id)) return res.notFound();
+    
+        if (req.params.association == "isRegistered") {
+            if (!await Event.findOne(req.params.fk)) return res.notFound();
+        }
+    
+        await User.addToCollection(req.params.id, req.params.association).members(req.params.fk);
+    
+        return res.ok('Operation completed.');
+    
+    },
+
+    dereg: async function (req, res) {
+
+        if (!['isRegistered'].includes(req.params.association)) return res.notFound();
+    
+        const message = sails.getInvalidIdMsg(req.params);
+    
+        if (message) return res.badRequest(message);
+    
+        if (!await User.findOne(req.params.id)) return res.notFound();
+    
+        if (req.params.association == "isRegistered") {
+            if (!await Event.findOne(req.params.fk)) return res.notFound();
+        }
+    
+        await User.removeFromCollection(req.params.id, req.params.association).members(req.params.fk);
+    
+        return res.ok('Operation completed.');
+    
     },
 
 };

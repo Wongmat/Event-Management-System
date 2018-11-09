@@ -73,6 +73,15 @@ module.exports.routes = {
   //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗
   //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝
 
+  '/event/populate': { view: '404' },
+'/user/populate': { view: '404' },
+'/user/register': { view: '404' },
+'/user/dereg': { view: '404' },
+
+'/event/:id/:association': 'EventController.populate',
+'/user/:id/:association': 'UserController.populate',
+'/user/:id/:association/register/:fk': 'UserController.register',
+'/user/:id/:association/dereg/:fk': 'UserController.dereg',
 
 
   //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗

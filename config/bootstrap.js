@@ -12,6 +12,21 @@
 module.exports.bootstrap = async function(done) {
   sails.bcrypt = require('bcrypt');
   const saltRounds = 10; 
+
+  sails.getInvalidIdMsg = function (opts) {
+
+    if (opts.id && isNaN(parseInt(opts.id))) {
+        return "Primary key specfied is invalid (incorrect type).";
+    }
+  
+    if (opts.fk && isNaN(parseInt(opts.fk))) {
+        return "Foreign key specfied is invalid (incorrect type).";
+    }
+  
+    return null;        // falsy
+  
+  }
+
   if (await Event.count() > 0) {
     return done();
 }
@@ -88,8 +103,17 @@ const hash = await sails.bcrypt.hash('123456', saltRounds);
 await User.createEach([
   { "username": "siteAdmin", "status": "admin", "password": hash },
   { "username": "Joe", "status": "student", "password": hash },
+  { "username": "Bob", "status": "student", "password": hash },
   // etc.
 ]);
+
+const nutcracker = await Event.findOne({name: "The Nutcracker"})
+const bruceLee = await Event.findOne({name: "Bruce Lee: Kung Fu . Art . Life"})
+const bob = await User.findOne({username: "Bob"})
+const joe = await User.findOne({username: "Joe"})
+
+await Event.addToCollection(nutcracker.id, 'hasAttending').members(bob.id);
+await Event.addToCollection(bruceLee.id, 'hasAttending').members(joe.id);
 
   return done();
 

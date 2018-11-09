@@ -23,6 +23,11 @@ module.exports = {
 index: async function (req, res) {
 
     var events = await Event.find({highlighted: 'Highlighted'}).limit(4);
+    const nutcracker = await Event.findOne({name: "The Nutcracker"})
+const bruce = await Event.findOne({name: "Bruce Lee: Kung Fu . Art . Life"})
+
+console.log(nutcracker.id);
+console.log(bruce.id);
     return res.view('event/index', { 'events': events });
 },
 
@@ -117,6 +122,22 @@ search: async function (req, res) {
         ? req.url + "?" : (req.url.match(/page.*$/)) 
         ? req.url.replace(/page.*$/, "") : req.url + "&";
     return res.view('event/search', { 'events': events, 'count': numOfPage, 'pageLess': pageLess });
+},
+
+populate: async function (req, res) {
+
+    if (!['hasAttending'].includes(req.params.association)) return res.notFound();
+
+    const message = sails.getInvalidIdMsg(req.params);
+
+    if (message) return res.badRequest(message);
+
+    var model = await Event.findOne(req.params.id).populate(req.params.association);
+
+    if (!model) return res.notFound();
+
+    return res.json(model);
+
 },
 
 };

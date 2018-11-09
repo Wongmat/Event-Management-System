@@ -62,6 +62,11 @@ module.exports = {
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
+    hasAttending: {
+      collection: 'User',
+      via: 'isRegistered'
+    },
+
   },
 
   getInvalidIdMsg: function (opts) {
