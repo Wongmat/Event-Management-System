@@ -21,13 +21,13 @@ module.exports = {
 },
 
 index: async function (req, res) {
-
     var events = await Event.find({highlighted: 'Highlighted'}).limit(4);
     const nutcracker = await Event.findOne({name: "The Nutcracker"})
 const bruce = await Event.findOne({name: "Bruce Lee: Kung Fu . Art . Life"})
 
 console.log(nutcracker.id);
 console.log(bruce.id);
+console.log(req.session);
     return res.view('event/index', { 'events': events });
 },
 
@@ -38,14 +38,15 @@ admin: async function (req, res) {
 },
 
 delete: async function (req, res) {
-
-    if (req.method == "POST") {
+    console.log(req.method);
+    if (req.method == "DELETE") {
         const id = parseInt(req.params.id) || -1;
-
         var models = await Event.destroy(id).fetch();
-
-        if (models.length > 0)
+        console.log(models)
+        if (models.length > 0) {
+            console.log("Sends")
             return res.send("Event Deleted.");
+        }
         else
             return res.send("Event not found.");
 
@@ -55,7 +56,7 @@ delete: async function (req, res) {
 },
 
 view: async function (req, res) {
-
+    
     var message = Event.getInvalidIdMsg(req.params);
 
     if (message) return res.badRequest(message);
@@ -64,7 +65,14 @@ view: async function (req, res) {
 
     if (!model) return res.notFound();
 
-    return res.view('event/view', { 'event': model });
+    var reg = await User.findOne(req.session.idNum).populate("isRegistered", {
+        where: {
+            id: req.params.id
+        }
+    })
+
+    var regStatus = reg.isRegistered.length == 0 ? false : true
+    return res.view('event/view', { 'event': model, 'registered': regStatus });
 
 },
 

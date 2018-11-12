@@ -14,11 +14,15 @@ module.exports = {
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
     username: {
-      type: "string"
+      type: "string",
+      unique: true,
+    required: true
     },
 
     status: {
-      type: "string"
+      type: "string",
+      enum: ['admin', 'student', 'visitor'],
+      defaultsTo: 'visitor'
     },
 
     password: {

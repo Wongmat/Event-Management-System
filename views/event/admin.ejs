@@ -1,10 +1,41 @@
+<div id="deleteResult"></div>
 <table class="table table-striped table-hover">
     <tbody>
     <% events.forEach( function(model) { %>
-        <tr>
+        <tr id="<%= model.id %>">
             <td><%= model.id %></td>
-            <td><a href="/event/update/<%= model.id %>"><%= model.name %></a></td>
+            <td><a href="/event/view/<%= model.id %>"><%= model.name %></a><button type="button" class="btn btn-danger" onclick="deleteEvent('<%= model.id %>')">Delete</button>
+                <a href="/event/update/<%= model.id %>"><button type="button" class="btn btn-warning">Update</button></a>
+                <a href="/user/<%= req.session.idNum %>/isRegistered/register/<%= model.id %>"><button type="button" class="btn btn-normal">Register</button></a></td>
         </tr>
     <% }); %>
 </tbody>
 </table>
+
+<script>
+async function deleteEvent(id) {
+    console.log("id " + id);
+var dr = document.getElementById("deleteResult");
+
+var r = confirm("Confirm Delete?");
+if (r == true) {
+    var response = await fetch("/event/" + id, {
+        method: "DELETE",
+        credentials: 'same-origin',
+    });
+
+    console.log(response);
+    
+    if (response.status == 200) {
+        document.getElementById(id).remove();
+        var data = await response.text();
+        dr.innerHTML = data;
+    } else {
+        dr.innerHTML = response.statusText;
+    }
+
+} else {
+    dr.innerHTML = "cancelled";
+}
+
+};</script>

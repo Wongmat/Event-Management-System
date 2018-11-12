@@ -13,8 +13,7 @@ module.exports = {
         if (!req.body.username) return res.badRequest();
         if (!req.body.password) return res.badRequest();          
     
-        var user = await User.findOne({ username: req.body.username });
-        console.log(user.id)
+        var user = await User.findOne({ username: req.body.username })
         if (!user) {
             res.status(401);
             return res.send("User not found");
@@ -32,6 +31,7 @@ module.exports = {
     
             req.session.status = user.status;
             req.session.name = user.username;
+            req.session.idNum = user.id;
     
             sails.log("Session: " + JSON.stringify(req.session) );
             
@@ -108,6 +108,12 @@ module.exports = {
     
         return res.ok('Operation completed.');
     
+    },
+
+    registered: async function (req, res) {
+        var model = await User.findOne(req.session.idNum).populate("isRegistered");
+        
+        return res.view('user/registered', { 'events': model.isRegistered });
     },
 
 };

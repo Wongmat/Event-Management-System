@@ -1,0 +1,14 @@
+<div class="row pl-3 pr-3">
+    <% events.forEach((model) => { %>
+    <div class="card col-12 col-md-6" style="height:50vh;">
+       <div class="card-body h-100">
+          <div class="row h-100">
+            <a href="/event/view/<%= model.id %>" class="card-title col-12"><%= model.name %></a>
+              <img src="<%= model.img_url %>" class="col-md-4 col-7" style="max-height: 80%;">
+              <p class="col-md-8 col-5" style="max-height: 80%; overflow: hidden;"><%= model.short_desc %></p>     
+    </div>
+    </div></div>
+
+
+<% }); %> 
+</div>

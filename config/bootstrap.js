@@ -104,6 +104,7 @@ await User.createEach([
   { "username": "siteAdmin", "status": "admin", "password": hash },
   { "username": "Joe", "status": "student", "password": hash },
   { "username": "Bob", "status": "student", "password": hash },
+  { "username": "Steve", "status": "student", "password": hash },
   // etc.
 ]);
 

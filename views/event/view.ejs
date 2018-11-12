@@ -8,7 +8,13 @@
                         <div class="card"><p class="card-text p-2"><b>Date: </b><%= event.date.toString().match(/^\d\d\d\d-\d\d-\d\d/) %></p></div>    
                         <div class="card"><p class="card-text p-2"><b>Time: </b><%= event.time %></p></div>  
                         <div class="card"><p class="card-text p-2"><b>Venue: </b><%= event.venue %></p></div>  
-                        <div class="card"><p class="card-text p-2"><b>Quota: </b><%= event.quota %></p></div>       
+                        <div class="card"><p class="card-text p-2"><b>Quota: </b><%= event.quota %></p></div>
+                        <% if (!registered == true) { %>
+                        <a href="/user/<%= req.session.idNum %>/isRegistered/register/<%= event.id %>"><button type="button" class="btn btn-normal">Register</button></a>
+                        <% } else { %>
+                                <a href="/user/<%= req.session.idNum %>/isRegistered/dereg/<%= event.id %>"><button type="button" class="btn btn-normal">Unregister</button></a>
+                                <% }; %>
+                        </td>       
                 </div>     
                     </div>
 </div>
