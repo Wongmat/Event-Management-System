@@ -3,10 +3,22 @@
     <tbody>
     <% events.forEach( function(model) { %>
         <tr id="<%= model.id %>">
-            <td><%= model.id %></td>
             <td><a href="/event/view/<%= model.id %>"><%= model.name %></a><button type="button" class="btn btn-danger" onclick="deleteEvent('<%= model.id %>')">Delete</button>
                 <a href="/event/update/<%= model.id %>"><button type="button" class="btn btn-warning">Update</button></a>
-                <a href="/user/<%= req.session.idNum %>/isRegistered/register/<%= model.id %>"><button type="button" class="btn btn-normal">Register</button></a></td>
+                <% if (!registered == true) { %>
+                    <br>
+                    <button type="button" class="btn btn-primary
+                    <% if (!event.quota == 0) { %>
+                            " onclick="register(<%= req.session.idNum %>,<%= event.id %>,<%= event.quota %>)">
+                            <% } else { %>
+                            disabled">
+                            <% } %>
+                            Register</button>
+            <% } else { %>
+                    <br>
+                    <button type="button" class="btn btn-danger" onclick="unregister(<%= req.session.idNum %>,<%= event.id %>,<%= event.quota %>)">Unregister</button>
+                    <% }; %>
+                    <% }; %>
         </tr>
     <% }); %>
 </tbody>
@@ -38,4 +50,55 @@ if (r == true) {
     dr.innerHTML = "cancelled";
 }
 
-};</script>
+};
+
+async function register(user, event, quota) {
+
+var r = confirm("Are you sure you would like to register?");
+if (r == true) {
+    var response = await fetch('/user/' + user + '/isRegistered/register/' + event, {
+        method: "POST",
+        credentials: 'same-origin',
+    });
+    
+    if (response.status == 200) {
+        await fetch('/event/' + event, {
+        method: "POST",
+        credentials: 'same-origin',
+        body: JSON.stringify({'quota': quota - 1})
+    });
+
+    alert(await response.text());
+    location.reload(true);
+
+    } else {
+        alert(await response.statusText);
+    }
+
+}
+}
+
+async function unregister(user, event, quota) {
+
+var r = confirm("Are you sure you would like to unregister for this event?");
+if (r == true) {
+    var response = await fetch('/user/' + user + '/isRegistered/dereg/' + event, {
+        method: "POST",
+        credentials: 'same-origin',
+    });
+    
+    if (response.status == 200) {
+        await fetch('/event/' + event, {
+        method: "POST",
+        credentials: 'same-origin',
+        body: JSON.stringify({'quota': quota + 1})
+    });
+
+    alert(await response.text());
+    location.reload(true);
+
+    } else {
+        alert(await response.statusText);
+    }
+
+}</script>

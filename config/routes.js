@@ -55,7 +55,7 @@ module.exports.routes = {
         venues: venues
       } },
 
-  'POST /event/update/:id': 'EventController.update',
+  'POST /event/:id': 'EventController.update',
 
   'DELETE /event/:id': 'EventController.delete',
 

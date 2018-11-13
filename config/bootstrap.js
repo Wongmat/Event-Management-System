@@ -93,7 +93,7 @@ await Event.createEach([
   time: "8:00-9:00",
   date: new Date("10/15/2018"),
   venue: "AAB",
-  quota: 50,
+  quota: 0,
   highlighted: "Highlighted",
 },
 ]);

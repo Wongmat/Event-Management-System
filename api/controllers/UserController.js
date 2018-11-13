@@ -73,6 +73,7 @@ module.exports = {
     register: async function (req, res) {
 
         if (!['isRegistered'].includes(req.params.association)) return res.notFound();
+
     
         const message = sails.getInvalidIdMsg(req.params);
     
@@ -83,10 +84,12 @@ module.exports = {
         if (req.params.association == "isRegistered") {
             if (!await Event.findOne(req.params.fk)) return res.notFound();
         }
+        var event = await Event.findOne(req.params.fk)
+        if (event.quota === 0) return res.badRequest("Quota is filled for this event.")
     
         await User.addToCollection(req.params.id, req.params.association).members(req.params.fk);
     
-        return res.ok('Operation completed.');
+        return res.ok('Registered successfully.');
     
     },
 
@@ -106,7 +109,7 @@ module.exports = {
     
         await User.removeFromCollection(req.params.id, req.params.association).members(req.params.fk);
     
-        return res.ok('Operation completed.');
+        return res.ok('Unregistered successfully.');
     
     },
 

@@ -56,7 +56,7 @@ delete: async function (req, res) {
 },
 
 view: async function (req, res) {
-    
+
     var message = Event.getInvalidIdMsg(req.params);
 
     if (message) return res.badRequest(message);
@@ -65,18 +65,25 @@ view: async function (req, res) {
 
     if (!model) return res.notFound();
 
+    var regStatus
+
+    if (req.session.idNum) {
     var reg = await User.findOne(req.session.idNum).populate("isRegistered", {
         where: {
             id: req.params.id
         }
     })
 
-    var regStatus = reg.isRegistered.length == 0 ? false : true
+    regStatus = reg.isRegistered.length == 0 ? false : true
+}
+
+    else regStatus = false;
     return res.view('event/view', { 'event': model, 'registered': regStatus });
 
 },
 
 update: async function (req, res) {
+    console.log(req.body)
     var id = parseInt(req.params.id) || -1;
     if (req.method == "GET") {
 
@@ -88,20 +95,10 @@ update: async function (req, res) {
             return res.send("No such event!");
 
     } else {
-        var models = await Event.update(id).set({
-            name: req.body.Event.name,
-            short_desc: req.body.Event.short_desc,
-            full_desc: req.body.Event.full_desc,
-            img_url: req.body.Event.img_url,
-            organizer: req.body.Event.organizer,
-            time: req.body.Event.time,
-            date: req.body.Event.date,
-            venue: req.body.Event.venue,
-            quota: req.body.Event.quota,
-            highlighted: req.body.Event.highlighted || "Not highlighted",
-        }).fetch();
+        if (req.body.date) req.body.date = new Date(req.body.date);
+        var models = await Event.update(id).set(req.body).fetch();
         if (models.length > 0)
-            return res.redirect(200, '/event/admin')
+            return res.send(200, "Update successful")
         else
             return res.send("Event not found!");
 

@@ -9,12 +9,76 @@
                         <div class="card"><p class="card-text p-2"><b>Time: </b><%= event.time %></p></div>  
                         <div class="card"><p class="card-text p-2"><b>Venue: </b><%= event.venue %></p></div>  
                         <div class="card"><p class="card-text p-2"><b>Quota: </b><%= event.quota %></p></div>
+                        <% if (req.session.idNum) { %>
                         <% if (!registered == true) { %>
-                        <a href="/user/<%= req.session.idNum %>/isRegistered/register/<%= event.id %>"><button type="button" class="btn btn-normal">Register</button></a>
+                                <br>
+                                <button type="button" class="btn btn-primary
+                                <% if (!event.quota == 0) { %>
+                                        " onclick="register(<%= req.session.idNum %>,<%= event.id %>,<%= event.quota %>)">
+                                        <% } else { %>
+                                        disabled">
+                                        <% } %>
+                                        Register</button>
                         <% } else { %>
-                                <a href="/user/<%= req.session.idNum %>/isRegistered/dereg/<%= event.id %>"><button type="button" class="btn btn-normal">Unregister</button></a>
+                                <br>
+                                <button type="button" class="btn btn-danger" onclick="unregister(<%= req.session.idNum %>,<%= event.id %>,<%= event.quota %>)">Unregister</button>
+                                <% }; %>
                                 <% }; %>
                         </td>       
                 </div>     
                     </div>
 </div>
+
+<script>
+async function register(user, event, quota) {
+
+var r = confirm("Are you sure you would like to register?");
+if (r == true) {
+    var response = await fetch('/user/' + user + '/isRegistered/register/' + event, {
+        method: "POST",
+        credentials: 'same-origin',
+    });
+    
+    if (response.status == 200) {
+        await fetch('/event/' + event, {
+        method: "POST",
+        credentials: 'same-origin',
+        body: JSON.stringify({'quota': quota - 1})
+    });
+
+    alert(await response.text());
+    location.reload(true);
+
+    } else {
+        alert(await response.statusText);
+    }
+
+}
+}
+
+async function unregister(user, event, quota) {
+
+var r = confirm("Are you sure you would like to unregister for this event?");
+if (r == true) {
+    var response = await fetch('/user/' + user + '/isRegistered/dereg/' + event, {
+        method: "POST",
+        credentials: 'same-origin',
+    });
+    
+    if (response.status == 200) {
+        await fetch('/event/' + event, {
+        method: "POST",
+        credentials: 'same-origin',
+        body: JSON.stringify({'quota': quota + 1})
+    });
+
+    alert(await response.text());
+    location.reload(true);
+
+    } else {
+        alert(await response.statusText);
+    }
+
+}
+}
+</script>
