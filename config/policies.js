@@ -24,6 +24,7 @@ module.exports.policies = {
     create: 'isAdmin',
     update: 'isAdmin',
     delete: 'isAdmin',
+    admin: 'isAdmin',
 
 
 },

@@ -37,7 +37,9 @@ module.exports = {
     },
 
     date: {
-      type: "string"
+      columnType: "datetime",
+      type: "ref"
+
     },
 
     venue: {

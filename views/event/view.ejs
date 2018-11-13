@@ -5,7 +5,7 @@
                         <div class="col-12 col-md-8 pt-2">
                         <div class="card"><p class="card-text p-2"><%= event.full_desc %></p></div> 
                         <div class="card"><p class="card-text p-2"><b>Organizer: </b><%= event.organizer %></p></div> 
-                        <div class="card"><p class="card-text p-2"><b>Date: </b><%= event.date.toString().match(/^\d\d\d\d-\d\d-\d\d/) %></p></div>    
+                        <div class="card"><p class="card-text p-2"><b>Date: </b><%= event.date.getMonth() + 1 + '/' + event.date.getDate() + '/' + event.date.getFullYear() %></p></div>    
                         <div class="card"><p class="card-text p-2"><b>Time: </b><%= event.time %></p></div>  
                         <div class="card"><p class="card-text p-2"><b>Venue: </b><%= event.venue %></p></div>  
                         <div class="card"><p class="card-text p-2"><b>Quota: </b><%= event.quota %></p></div>

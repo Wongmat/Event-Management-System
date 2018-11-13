@@ -1,14 +1,18 @@
-<div class="row pl-3 pr-3">
-    <% events.forEach((model) => { %>
-    <div class="card col-12 col-md-6" style="height:50vh;">
-       <div class="card-body h-100">
-          <div class="row h-100">
-            <a href="/event/view/<%= model.id %>" class="card-title col-12"><%= model.name %></a>
-              <img src="<%= model.img_url %>" class="col-md-4 col-7" style="max-height: 80%;">
-              <p class="col-md-8 col-5" style="max-height: 80%; overflow: hidden;"><%= model.short_desc %></p>     
-    </div>
-    </div></div>
-
-
-<% }); %> 
+<h3>Registered Events</h3>
+<div class="row pl-2 pr-2">
+  <div class="col-12  order-md-1 order-2">
+      <div class="row">
+  <% events.forEach((model) => { %>
+  <div class="card col-md-4 col-12" style="max-height: 30em">
+          <div class="card-body h-100">
+          <img src="<%= model.img_url %>" class="card-img-top pb-2" style="max-height: 60%; min-height: 50%;">
+          <a href="/event/view/<%= model.id %>" class="card-title"><%= model.name %></a>
+          <br><br>
+          <div class="card"><p class="card-text p-2"><b>Date: </b><%= event.date.getMonth() + 1 + '/' + event.date.getDate() + '/' + event.date.getFullYear() %></p></div>    
+                        <div class="card"><p class="card-text p-2"><b>Time: </b><%= model.time %></p></div>  
+                        <div class="card"><p class="card-text p-2"><b>Venue: </b><%= model.venue %></p></div>   
+          </div>     
+  </div>
+  <% }); %>
+</div>
 </div>
