@@ -21,7 +21,7 @@ module.exports = {
 
     status: {
       type: "string",
-      enum: ['admin', 'student', 'visitor'],
+      enum: ['admin', 'student'],
       defaultsTo: 'visitor'
     },
 

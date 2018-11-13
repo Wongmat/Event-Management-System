@@ -1,31 +1,31 @@
 <!--create.ejs-->
-<form action="/event/create" method="POST">
+<form action="/event/" onsubmit="sendCreate(this);return false" method="POST" id="main">
     <div class="row">
         <div class="col-md-6 col-12">
 
     <div class="form-group">
         <label>Name</label>
-        <input type="text" class="form-control" name="Event[name]" required>
+        <input type="text" class="form-control" name="name" required>
     </div>
     <div class="form-group">
             <label>Short Description</label>
-            <textarea class="form-control" name="Event[short_desc]" rows="5" required></textarea>
+            <textarea class="form-control" name="short_desc" rows="5" required></textarea>
         </div>
         <div class="form-group">
                 <label>Full Description</label>
-                <textarea class="form-control" name="Event[full_desc]" rows="10" required></textarea>
+                <textarea class="form-control" name="full_desc" rows="10" required></textarea>
             </div>
     </div>
     <div class="col-md-6 col-12">
     <div class="form-group">
             <label>Image URL</label>
-            <input type="text" class="form-control" name="Event[img_url]" required>
+            <input type="text" class="form-control" name="img_url" required>
         </div>
 
 
     <div class="form-group">
             <label>Organizer</label>
-            <select class="form-control" name="Event[organizer]">
+            <select class="form-control" name="organizer">
                 <option style="display:none;" selected>Please select an option</option>
                 <% organizers.forEach(function(organizer){ %>
                     <option value="<%=organizer %>"><%=organizer %></option>
@@ -36,15 +36,15 @@
 
     <div class="form-group">
         <label>Date</label>
-        <input type="text" class="form-control date" name="Event[date]" required >
+        <input type="text" class="form-control date" name="date" required >
     </div>
     <div class="form-group">
         <label>Time</label>
-        <input type="text" class="form-control" name="Event[time]" placeholder="Starting time - Ending time" required>
+        <input type="text" class="form-control" name="time" placeholder="Starting time - Ending time" required>
     </div>
     <div class="form-group">
         <label>Venue</label>
-        <select class="form-control" name="Event[venue]">
+        <select class="form-control" name="venue">
                 <option style="display:none;" selected>Please select an option</option>
             <% venues.forEach(function(venue){ %>
                 <option value="<%= venue %>"><%= venue %></option>
@@ -53,13 +53,37 @@
     </div>
     <div class="form-group">
         <label>Quota</label>
-        <input type="number" class="form-control" name="Event[quota]" required>
+        <input type="number" class="form-control" name="quota" required>
     </div>
     <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="Event[highlighted]" value="Highlighted" id="HighlightedCheck">
+        <input class="form-check-input" type="checkbox" name="highlighted" value="Highlighted" id="HighlightedCheck">
         <label class="form-check-label pb-3" for="HighlightedCheck">Highlighted Event</label>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
     </div>
 </div>
 </form>
+
+<script>
+     async function sendCreate(elements) {
+    var variables = await new FormData(elements);
+    console.log(variables);
+    if (!variables.get('highlighted')) data.append('highlighted', 'Not Highlighted');
+var response = await fetch("/event", {
+    method: "POST",
+    credentials: 'same-origin',
+    body: variables,
+});
+
+if (response.status == 200) {
+    var message = await response.text();
+    alert(message);
+} else if (response.status == 401) {
+    var message = await response.text();
+    alert(message);
+} else {
+    alert(response.statusText);
+}
+
+};
+</script>

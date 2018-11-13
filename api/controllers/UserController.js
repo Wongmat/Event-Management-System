@@ -7,8 +7,6 @@
 
 module.exports = {
     login: async function (req, res) {
-
-        if (req.method == "GET") return res.view('user/login');
     
         if (!req.body.username) return res.badRequest();
         if (!req.body.password) return res.badRequest();          
@@ -66,7 +64,7 @@ module.exports = {
     
         if (!model) return res.notFound();
     
-        return res.json(model);
+        return res.view('user/registered', { 'events': model.isRegistered });
     
     },
 
@@ -111,12 +109,6 @@ module.exports = {
     
         return res.ok('Unregistered successfully.');
     
-    },
-
-    registered: async function (req, res) {
-        var model = await User.findOne(req.session.idNum).populate("isRegistered");
-        
-        return res.view('user/registered', { 'events': model.isRegistered });
     },
 
 };

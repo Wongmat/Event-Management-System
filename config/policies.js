@@ -21,8 +21,16 @@ module.exports.policies = {
 
   EventController: {
 
-    create: 'isAdmin'
+    create: 'isAdmin',
+    update: 'isAdmin',
+    delete: 'isAdmin',
 
+
+},
+
+UserController: {
+  register: 'isStudent',
+  dereg: 'isStudent'
 }
 
 };

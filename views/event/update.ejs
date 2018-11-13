@@ -1,5 +1,5 @@
 <!--update.ejs-->
-<form action="/event/<%= event.id %>" onsubmit="sendUpdate(this);return false" method="POST" id="main">
+<form action="/event/<%= event.id %>" onsubmit="sendUpdate(this);return false" method="PUT" id="main">
     <div class="row">
         <div class="col-md-6 col-12">
 
@@ -85,7 +85,7 @@
     var data = new FormData(elements);
     if (!data.get('highlighted')) data.append('highlighted', 'Not Highlighted');
 var response = await fetch(elements.action, {
-    method: elements.method,
+    method: "PUT",
     credentials: 'same-origin',
     body: data,
 });

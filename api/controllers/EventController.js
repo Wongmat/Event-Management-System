@@ -7,44 +7,34 @@
 
 module.exports = {
   create: async function (req, res) {
-
     if (req.method == "GET")
         return res.view('event/create');
 
-    if (typeof req.body.Event === "undefined")
+    if (typeof req.body === "undefined")
         return res.badRequest("Form-data not received.");
-    if (!req.body.Event.highlighted) req.body.Event.highlighted = "Not highlighted";
-    req.body.Event.date = new Date(req.body.Event.date);
-    await Event.create(req.body.Event);
-
-    return res.redirect(200, './create')
+    req.body.date = new Date(req.body.date);
+    await Event.create(req.body);
+    return res.send(200, "Event created!")
 },
 
 index: async function (req, res) {
     var events = await Event.find({highlighted: 'Highlighted'}).limit(4);
-    const nutcracker = await Event.findOne({name: "The Nutcracker"})
-const bruce = await Event.findOne({name: "Bruce Lee: Kung Fu . Art . Life"})
-
-console.log(nutcracker.id);
-console.log(bruce.id);
-console.log(req.session);
     return res.view('event/index', { 'events': events });
 },
 
 admin: async function (req, res) {
     var events = await Event.find();
-    return res.view('event/admin', { 'events': events });
+    var registered = await User.findOne(req.session.idNum).populate('isRegistered');
+
+    return res.view('event/admin', { 'events': events, 'registered': registered.isRegistered  });
 
 },
 
 delete: async function (req, res) {
-    console.log(req.method);
     if (req.method == "DELETE") {
         const id = parseInt(req.params.id) || -1;
         var models = await Event.destroy(id).fetch();
-        console.log(models)
         if (models.length > 0) {
-            console.log("Sends")
             return res.send("Event Deleted.");
         }
         else
@@ -83,7 +73,6 @@ view: async function (req, res) {
 },
 
 update: async function (req, res) {
-    console.log(req.body)
     var id = parseInt(req.params.id) || -1;
     if (req.method == "GET") {
 
@@ -141,7 +130,7 @@ populate: async function (req, res) {
 
     if (!model) return res.notFound();
 
-    return res.json(model);
+    return res.view('event/attendees', { 'attendees': model.hasAttending });
 
 },
 

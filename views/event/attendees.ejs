@@ -1,0 +1,17 @@
+<table class="table table-striped table-hover">
+        <thead>
+                <tr>
+                  <th scope="col">User ID</th>
+                  <th scope="col">Username</th>
+                </tr>
+              </thead>
+    <tbody>
+    <% attendees.forEach( function(person) { %>
+        <tr>
+                    <th scope="row"><%= person.id %></th>
+                    <td><%= person.username %></td>
+               
+        </tr>
+    <% }); %>
+</tbody>
+</table>
