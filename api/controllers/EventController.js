@@ -22,6 +22,11 @@ index: async function (req, res) {
     return res.view('event/index', { 'events': events });
 },
 
+highlighted: async function (req, res) {
+    var events = await Event.find({highlighted: 'Highlighted'}).limit(4);
+    return res.status(200).json(events);
+},
+
 admin: async function (req, res) {
     var events = await Event.find();
     var registered = await User.findOne(req.session.idNum).populate('isRegistered');
@@ -68,6 +73,7 @@ view: async function (req, res) {
 }
 
     else regStatus = false;
+    if (req.wantsJSON) return res.status(200).json(model);
     return res.view('event/view', { 'event': model, 'registered': regStatus });
 
 },
@@ -104,7 +110,8 @@ search: async function (req, res) {
         date: {'>=': startDate, '<=': endDate},
         venue: req.query.venue || {'!=': req.query.venue}
     }
-    const numOfItemsPerPage = 2;
+    
+    const numOfItemsPerPage = (req.wantsJSON) ? 500 : 2;
         var events = await Event.find({
             where: terms,
             sort: 'name',
@@ -115,6 +122,10 @@ search: async function (req, res) {
         let pageLess = (req.url.endsWith("search")) 
         ? req.url + "?" : (req.url.match(/page.*$/)) 
         ? req.url.replace(/page.*$/, "") : req.url + "&";
+    if (req.wantsJSON) {
+        return res.status(200).json(events);
+    }
+
     return res.view('event/search', { 'events': events, 'count': numOfPage, 'pageLess': pageLess });
 },
 

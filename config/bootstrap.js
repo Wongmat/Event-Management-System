@@ -53,7 +53,7 @@ await Event.createEach([
   organizer: "CS Students Association",
   time: "5:00-8:00",
   date: new Date("7/25/2018"),
-  venue: "FSC",
+  venue: "DLB",
   quota: 10,
   highlighted: "Highlighted",
 },
