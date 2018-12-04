@@ -7,7 +7,8 @@
 
 module.exports = {
     login: async function (req, res) {
-    
+        console.log(req.body.username);
+        console.log(req.body.password);
         if (!req.body.username) return res.badRequest();
         if (!req.body.password) return res.badRequest();          
     
@@ -63,7 +64,8 @@ module.exports = {
         var model = await User.findOne(req.params.id).populate(req.params.association);
     
         if (!model) return res.notFound();
-    
+        
+        if(req.wantsJSON) return res.status(200).json(model.isRegistered);
         return res.view('user/registered', { 'events': model.isRegistered });
     
     },
@@ -110,6 +112,10 @@ module.exports = {
         return res.ok('Unregistered successfully.');
     
     },
+
+    getCookie: async function (req, res) {
+        return res.status(200).json(req.session);
+    }
 
 };
 

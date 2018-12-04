@@ -8,7 +8,7 @@
  * https://sailsjs.com/anatomy/config/routes-js
  */
 const organizers = ["CS Students Association", "Arts Students Association", "AIESEC", "Film Studies Students Association"];
-const venues = ["FSC", "AAB", "CVA", "OEM"];
+const venues = ["DLB", "AAB", "CVA", "OEM"];
 
 module.exports.routes = {
 
@@ -82,10 +82,12 @@ module.exports.routes = {
 '/user/register': { view: '404' },
 '/user/dereg': { view: '404' },
 
+'/event/highlighted': 'EventController.highlighted',
 '/event/:id/:association': 'EventController.populate',
 '/user/:id/:association': 'UserController.populate',
 '/user/:id/:association/register/:fk': 'UserController.register',
 '/user/:id/:association/dereg/:fk': 'UserController.dereg',
+'/user/getCookie': 'UserController.getCookie',
 
 
   //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
